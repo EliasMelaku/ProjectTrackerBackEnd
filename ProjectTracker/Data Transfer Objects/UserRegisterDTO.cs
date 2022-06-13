@@ -13,6 +13,7 @@
 
         public string Password { get; set; }
 
-        public DateTime DOB { get; set; }
+        public string Profile { get; set; }
+
     }
 }

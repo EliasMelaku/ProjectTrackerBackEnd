@@ -37,7 +37,7 @@ namespace ProjectTracker.Repositories
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    DOB = user.DOB,
+                    Profile = user.Profile,
                     Projects = user.Projects
                     
                     
@@ -74,11 +74,20 @@ namespace ProjectTracker.Repositories
                 Email = user.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                DOB = user.DOB
+                Profile = user.Profile
             };
+
+            try
+            {
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception( e.InnerException.ToString().Substring(100, 10));
+            }
             
-            _context.Users.Add(newUser); 
-            await _context.SaveChangesAsync();
+            
                 
             return new UserDTO
             {
@@ -86,12 +95,9 @@ namespace ProjectTracker.Repositories
                 FirstName = newUser.FirstName, 
                 LastName = newUser.LastName, 
                 Email = newUser.Email, 
-                DOB = newUser.DOB
+                Profile = newUser.Profile
             };
             
-            
-            
-
             
         }
 
@@ -103,8 +109,6 @@ namespace ProjectTracker.Repositories
 
         }
 
-
-
         /* ======================== Put/Update Method =========================================== */
 
         public async Task Update(UserUpdateDTO user)
@@ -114,7 +118,7 @@ namespace ProjectTracker.Repositories
             updatedUser.FirstName = user.FirstName;
             updatedUser.LastName = user.LastName;
             updatedUser.Email = user.Email;
-            updatedUser.DOB = user.DOB;
+            updatedUser.Profile = user.Profile;
             _context.Entry(updatedUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             

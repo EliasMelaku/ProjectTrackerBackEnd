@@ -13,7 +13,7 @@ namespace ProjectTracker.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ProjectTaskModel>().Property<string>("SubTask").HasField("SubTask");
+            modelBuilder.Entity<ProjectModel>().Property<string>("Deliverable").HasField("Deliverable");
             
         }
 

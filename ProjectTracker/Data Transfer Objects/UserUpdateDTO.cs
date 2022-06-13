@@ -12,6 +12,6 @@
 
         public string Email { get; set; }
 
-        public DateTime DOB { get; set; }
+        public string Profile { get; set; }
     }
 }

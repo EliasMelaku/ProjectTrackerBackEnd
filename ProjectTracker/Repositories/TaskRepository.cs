@@ -19,8 +19,9 @@ namespace ProjectTracker.Repositories
             var myTask = new ProjectTaskModel
             {
                 Title = task.Title,
-                SubTasks = task.Subtasks,
-                ProjectId = task.ProjectId,
+                Description = task.Description,
+                IsCompleted = task.IsCompleted,
+                ProjectId = task.ProjectId
             };
             _context.Tasks.Add(myTask);
             await _context.SaveChangesAsync();
@@ -28,9 +29,15 @@ namespace ProjectTracker.Repositories
             return myTask;
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var taskToDelete = await _context.Tasks.FindAsync(id);
+            if (taskToDelete != null)
+            {
+                _context.Remove(taskToDelete);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ProjectTaskModel>> Get()
@@ -43,9 +50,22 @@ namespace ProjectTracker.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Update(ProjectTaskModel task)
+        public async Task Complete(int id)
         {
-            throw new NotImplementedException();
+            var updatedTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == id);
+            updatedTask.IsCompleted = true;
+            _context.Entry(updatedTask).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task Update(TaskDTO task)
+        {
+            var updatedTask = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == task.Id);
+            updatedTask.Title = task.Title;
+            updatedTask.Description = task.Description;
+            updatedTask.IsCompleted = task.IsCompleted;
+            _context.Entry(updatedTask).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

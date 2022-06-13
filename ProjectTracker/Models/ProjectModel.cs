@@ -6,6 +6,10 @@ namespace ProjectTracker.Models
 {
     public class ProjectModel
     {
+
+        private string Deliverable;
+        private string delimiter = "~";
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
@@ -13,13 +17,26 @@ namespace ProjectTracker.Models
 
         public int ProjectManagerId { get; set; }
 
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
         public string? Department { get; set; }
 
         public DateTime? CreatedDate { get; set; }
 
         public DateTime? DueDate { get; set; }
 
-        public int Stage { get; set; }
+        [NotMapped]
+        public List<string> Deliverables
+        {
+            get { return Deliverable.Split(delimiter).ToList(); }
+            set { Deliverable = string.Join($"{delimiter}", value);  }
+        }
+
+        public int Completion { get; set; }
+
+        public string? Urgency { get; set; }
 
         public string? Report { get; set; }
 

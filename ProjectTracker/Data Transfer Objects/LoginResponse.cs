@@ -6,6 +6,8 @@
 
         public string Username { get; set; }
 
+        public string Profile { get; set; }
+
         public string Token { get; set; }
     }
 }

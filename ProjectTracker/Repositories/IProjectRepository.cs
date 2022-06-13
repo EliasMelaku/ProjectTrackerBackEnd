@@ -8,11 +8,13 @@ namespace ProjectTrackingTool.Repositories
     {
         Task<IEnumerable<ProjectModel>> Get();
 
-        Task<ProjectDTO> Get(int id);
+        Task<ProjectModel> Get(int id);
 
         Task<ProjectModel> Create(ProjectDTO project);
 
         Task Update(ProjectDTO project);
+
+        Task Update(int id, int completion);
 
         Task Delete(int id);
     }

@@ -24,10 +24,31 @@ namespace ProjectTracker.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProjectModel>> PostProject([FromBody] TaskDTO model)
+        public async Task<ActionResult<ProjectTaskModel>> PostProject([FromBody] TaskDTO model)
         {
-            var newProject = await _taskRepository.Create(model);
-            return CreatedAtAction(nameof(GetProjects), new { id = newProject.Id }, newProject);
+            var newTask = await _taskRepository.Create(model);
+            return CreatedAtAction(nameof(GetProjects), new { id = newTask.Id }, newTask);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            await _taskRepository.Delete(id);
+            return Ok("Task Deleted");
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTask(TaskDTO model)
+        {
+            await _taskRepository.Update(model);
+            return Ok("Task Updated");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> CompleteTask(int id)
+        {
+            await _taskRepository.Complete(id);
+            return Ok("Completed");
         }
     }
 }

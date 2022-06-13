@@ -21,8 +21,13 @@ namespace ProjectTracker.Repositories
             {
                 Department = project.Department,
                 ProjectManagerId = project.ProjectManagerId,
+                Title = project.Title,
+                Description = project.Description,
                 CreatedDate = project.CreatedDate,
                 DueDate = project.DueDate,
+                Urgency = project.Urgency,
+                Completion = project.Completion,
+                Deliverables = project.Deliverables,
                 Report = project.Report,
             };
 
@@ -40,35 +45,48 @@ namespace ProjectTracker.Repositories
         public async Task<IEnumerable<ProjectModel>> Get()
         {
             var projects = await _context.Projects.Include(p => p.Tasks).ToListAsync();
-            var projectDtos = new List<ProjectDTO>();
-
-            foreach (ProjectModel project in projects)
-            {
-                projectDtos.Add(new ProjectDTO
-                {
-                    ProjectManagerId = project.ProjectManagerId,
-                    Department = project.Department,
-                    CreatedDate = project.CreatedDate,
-                    DueDate = project.DueDate,
-                    Stage = project.Stage,
-                    Report = project.Report
-
-                });
-                
-            }
+            // var projectDtos = new List<ProjectDTO>();
+            //
+            // foreach (ProjectModel project in projects)
+            // {
+            //     projectDtos.Add(new ProjectDTO
+            //     {
+            //         ProjectManagerId = project.ProjectManagerId,
+            //         Department = project.Department,
+            //         Title = project.Title,
+            //         Description = project.Description,
+            //         CreatedDate = project.CreatedDate,
+            //         DueDate = project.DueDate,
+            //         Urgency = project.Urgency,
+            //         Completion = project.Completion,
+            //         Deliverables = project.Deliverables,
+            //         Report = project.Report
+            //
+            //     });
+            //     
+            // }
             
 
             return projects;
         }
 
-        public Task<ProjectDTO> Get(int id)
+        public async Task<ProjectModel> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Projects.Include(p => p.Tasks).FirstOrDefaultAsync(p => p.Id == id);
+            
         }
 
         public Task Update(ProjectDTO project)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task Update(int id, int completion)
+        {
+            var updatedProject = await _context.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            updatedProject.Completion = completion;
+            _context.Entry(updatedProject).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ProjectTracker.Models
 {
     [Index(nameof(Username), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
     public class UserModel
     {
         [Key]
@@ -19,14 +20,13 @@ namespace ProjectTracker.Models
 
         public string Email { get; set; }
 
+        public string Profile { get; set; }
 
         [System.Runtime.Serialization.IgnoreDataMember]
         public byte[] PasswordHash { get; set; }
 
         [System.Runtime.Serialization.IgnoreDataMember]
         public byte[] PasswordSalt { get; set; }
-
-        public DateTime DOB { get; set; }
 
         public List<ProjectModel>? Projects { get; set; }
     }

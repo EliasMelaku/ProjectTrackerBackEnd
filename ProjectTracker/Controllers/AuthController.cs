@@ -38,6 +38,12 @@ namespace ProjectTracker.Controllers
             return await _userRepository.Get(id);
         }
 
+        [HttpGet("string/{username}")]
+        public async Task<UserModel> GetUserStr(string username)
+        {
+            return await _userRepository.Get(username);
+        }
+
         /* ================ Register New User ================== */
 
         [HttpPost("register")]
@@ -48,9 +54,14 @@ namespace ProjectTracker.Controllers
                 var newUser = await _userRepository.Create(model);
                 return CreatedAtAction(nameof(GetUsers), new { username = newUser.Username }, newUser);
             }
-            catch (SqliteException e)
+            catch (Exception e)
             {
-                return Ok("Username taken");
+                if (e.ToString().Contains("Username"))
+                {
+                    return Ok( "Username");
+                }
+
+                return Ok("Email");
             }
         }
 
@@ -74,7 +85,8 @@ namespace ProjectTracker.Controllers
             {
                 Id = user.Id, 
                 Username = model.UserName, 
-                Token = message
+                Token = message,
+                Profile = user.Profile
             };
             
             
@@ -86,7 +98,7 @@ namespace ProjectTracker.Controllers
         /* ================ Edit User Profile======= */
 
         [HttpPut]
-        public async Task<IActionResult> PutHotel(UserUpdateDTO user)
+        public async Task<IActionResult> EditUser(UserUpdateDTO user)
         {
             await _userRepository.Update(user);
             return NoContent();

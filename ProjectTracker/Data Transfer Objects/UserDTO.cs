@@ -14,7 +14,7 @@ namespace ProjectTracker.Data_Transfer_Objects
 
         public string Email { get; set; }
 
-        public DateTime DOB { get; set; }
+        public string Profile { get; set; }
 
         public List<ProjectModel>? Projects { get; set; }
     }

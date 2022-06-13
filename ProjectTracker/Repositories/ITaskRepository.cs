@@ -12,7 +12,9 @@ namespace ProjectTracker.Repositories
 
             Task<ProjectTaskModel> Create(TaskDTO task);
 
-            Task Update(ProjectTaskModel task);
+            Task Update(TaskDTO task);
+
+            Task Complete(int id);
 
             Task Delete(int id);
     }
