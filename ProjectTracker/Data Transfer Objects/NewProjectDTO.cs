@@ -1,12 +1,8 @@
-﻿using ProjectTracker.Models;
-
-namespace ProjectTracker.Data_Transfer_Objects
+﻿namespace ProjectTracker.Data_Transfer_Objects
 {
-    public class ProjectDTO
+    public class NewProjectDTO
     {
         public int ProjectManagerId { get; set; }
-
-        public SimpleUser ProjectManager { get; set; }
 
         public string? Department { get; set; }
 
@@ -24,12 +20,8 @@ namespace ProjectTracker.Data_Transfer_Objects
 
         public List<string> Deliverables { get; set; }
 
-        public List<SimpleUser> Users { get; set; }
-
-        public List<ProjectTaskModel> Tasks { get; set; }
+        public List<int> Users { get; set; }
 
         public string? Report { get; set; }
-
-        public bool IsCompleted { get; set; }
     }
 }

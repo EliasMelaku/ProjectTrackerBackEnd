@@ -5,7 +5,7 @@ namespace ProjectTracker.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<UserModel>> Get();
+        Task<IEnumerable<SimpleUser>> Get();
 
         Task<UserModel> Get(int id);
 
@@ -16,6 +16,8 @@ namespace ProjectTracker.Repositories
         Task<string> Login(UserLoginDTO user);
 
         Task Update(UserUpdateDTO user);
+
+        Task<string> Update(ChangePassword password);
 
         Task Delete(int id);
     }

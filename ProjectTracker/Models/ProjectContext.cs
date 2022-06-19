@@ -14,7 +14,8 @@ namespace ProjectTracker.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ProjectModel>().Property<string>("Deliverable").HasField("Deliverable");
-            
+            modelBuilder.Entity<ProjectModel>().Property<string>("User").HasField("User");
+
         }
 
         public DbSet<ProjectModel> Projects { get; set; }

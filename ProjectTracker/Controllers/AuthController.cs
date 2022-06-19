@@ -27,7 +27,7 @@ namespace ProjectTracker.Controllers
         /* ================ Get all users ================== */
 
         [HttpGet, Authorize]
-        public async Task<IEnumerable<UserModel>> GetUsers()
+        public async Task<IEnumerable<SimpleUser>> GetUsers()
         {
             return await _userRepository.Get();
         }
@@ -104,9 +104,18 @@ namespace ProjectTracker.Controllers
             return NoContent();
         }
 
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> ChangeUserPassword(ChangePassword password)
+        {
+            var message = await _userRepository.Update(password);
+            return Ok(message);
+        }
+
+
+
         /* ================ Delete User ======= */
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _userRepository.Delete(id);

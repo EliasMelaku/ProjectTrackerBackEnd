@@ -25,27 +25,21 @@ namespace ProjectTracker.Repositories
 
         /* ======================== Get Methods =========================================== */
             
-        public async Task<IEnumerable<UserModel>> Get()
+        public async Task<IEnumerable<SimpleUser>> Get()
         {
-            var usersDto = new List<UserDTO>();
+            var simpleUsers = new List<SimpleUser>();
             var users = await _context.Users.Include(u => u.Projects).ToListAsync();
             foreach (UserModel user in users)
             {
-                usersDto.Add(new UserDTO
+                simpleUsers.Add(new SimpleUser
                 {
+                    Id = user.Id,
                     Username = user.Username,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    Profile = user.Profile,
-                    Projects = user.Projects
-                    
-                    
-
+                    Profile = user.Profile
                 });
             }
 
-            return users;
+            return simpleUsers;
         }
 
         public async Task<UserModel> Get(int id)
@@ -58,7 +52,6 @@ namespace ProjectTracker.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
         }
-
 
         /* ======================== Post Methods =========================================== */
 
@@ -124,8 +117,28 @@ namespace ProjectTracker.Repositories
             
         }
 
+        public async Task<string> Update(ChangePassword password)
+        {
+            var updatedUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == password.Id);
+            if (updatedUser != null)
+            {
+                var checkOldPassword = VerifyPassword(password.OldPassword, updatedUser.PasswordHash, updatedUser.PasswordSalt);
+                if (checkOldPassword)
+                {
+                    CreatePasswordHash(password.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+                    updatedUser.PasswordHash = passwordHash;
+                    updatedUser.PasswordSalt = passwordSalt;
+                    _context.Entry(updatedUser).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return "Password successfully changed";
+                }
+                return "Old password was incorrect";
+                
+            }
 
+            return "User Not found";
 
+        }
 
         /* ======================== Delete Method =========================================== */
 
@@ -141,8 +154,6 @@ namespace ProjectTracker.Repositories
             await _context.SaveChangesAsync();
 
         }
-
-
 
         /* ======================== Helper Methods =========================================== */
 
